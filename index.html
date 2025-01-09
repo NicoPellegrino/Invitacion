@@ -4,7 +4,73 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Ámbar - Mis XV Años</title>
-  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* General */
+    body, html {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      background-color: #000;
+      overflow: hidden;
+      font-family: 'Arial', sans-serif;
+      color: #fff;
+    }
+
+    /* Fondo con partículas */
+    #particles-js {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+    }
+
+    /* Contenido central */
+    .content {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      z-index: 1;
+      color: #fff;
+    }
+
+    /* Icono */
+    .icon img {
+      width: 100px;
+      height: 100px;
+      margin-bottom: 20px;
+    }
+
+    /* Título */
+    h1 {
+      font-size: 3rem;
+      margin: 10px 0;
+    }
+
+    /* Fecha y hora */
+    p {
+      font-size: 1.2rem;
+      margin: 5px 0;
+    }
+
+    /* Botón */
+    .btn {
+      background: transparent;
+      border: 2px solid #fff;
+      color: #fff;
+      padding: 10px 20px;
+      font-size: 1rem;
+      border-radius: 25px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .btn:hover {
+      background-color: #fff;
+      color: #000;
+    }
+  </style>
 </head>
 <body>
   <!-- Contenedor del fondo con partículas -->
@@ -28,7 +94,75 @@
     </div>
   </div>
 
-  <script src="particles.min.js"></script>
-  <script src="script.js"></script>
+  <script>
+    // Configuración de partículas
+    const particlesJS = (id, options) => {
+      const canvas = document.createElement('canvas');
+      canvas.style.position = 'absolute';
+      canvas.style.top = '0';
+      canvas.style.left = '0';
+      canvas.style.width = '100%';
+      canvas.style.height = '100%';
+      document.getElementById(id).appendChild(canvas);
+
+      const ctx = canvas.getContext('2d');
+      const particles = [];
+      const numParticles = options.particles.number.value || 100;
+      const particleColor = options.particles.color.value || '#ffffff';
+
+      for (let i = 0; i < numParticles; i++) {
+        particles.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          r: Math.random() * 3 + 1,
+          color: particleColor,
+          vx: Math.random() * 2 - 1,
+          vy: Math.random() * 2 - 1,
+        });
+      }
+
+      const render = () => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        particles.forEach((particle) => {
+          ctx.beginPath();
+          ctx.arc(particle.x, particle.y, particle.r, 0, Math.PI * 2);
+          ctx.fillStyle = particle.color;
+          ctx.fill();
+        });
+      };
+
+      const update = () => {
+        particles.forEach((particle) => {
+          particle.x += particle.vx;
+          particle.y += particle.vy;
+
+          if (particle.x < 0 || particle.x > canvas.width) particle.vx *= -1;
+          if (particle.y < 0 || particle.y > canvas.height) particle.vy *= -1;
+        });
+      };
+
+      const loop = () => {
+        update();
+        render();
+        requestAnimationFrame(loop);
+      };
+
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      window.addEventListener('resize', () => {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      });
+
+      loop();
+    };
+
+    particlesJS('particles-js', {
+      particles: {
+        number: { value: 100 },
+        color: { value: '#ffffff' },
+      },
+    });
+  </script>
 </body>
 </html>
